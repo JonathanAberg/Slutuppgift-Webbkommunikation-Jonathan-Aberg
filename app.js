@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3001"; // Base URL for your backend
+const API_BASE = "http://localhost:3000"; // Base URL for your backend
 const taskForm = document.getElementById("task-form");
 const taskList = document.getElementById("task-list");
 

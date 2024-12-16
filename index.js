@@ -10,7 +10,7 @@ app.use(cors());
 // Middleware
 app.use(express.json());
 
-const PORT = 3001;
+const PORT = 3000;
 
 // MongoDB Connection
 mongoose
@@ -28,6 +28,32 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model("Task", taskSchema);
 
 // Endpoints
+
+//GET /tasks/:categories/ - Fetch all unique categories
+
+app.get("/tasks/categories", async (req, res) => {
+  try {
+    const categories = await Task.distinct("category");
+    res.json(categories);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching categories." });
+  }
+});
+
+//GET /tasks/categories/:category_name - fetch tasks by category
+
+app.get("/tasks/categories/:category_name", async (req, res) => {
+  try {
+    const tasks = await Task.find({ category: req.params.category_name });
+    if (tasks.length > 0) {
+      res.json(tasks);
+    } else {
+      res.status(404).json({ message: "No tasks found in this category." });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching tasks by category." });
+  }
+});
 
 // GET /tasks - Fetch all tasks
 app.get("/tasks", async (req, res) => {
